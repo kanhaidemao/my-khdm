@@ -3,7 +3,7 @@ import { navs } from '../data/portfolio'
 export default function AppHeader() {
   return (
     <header>
-      <div className="brand">DEV.FOLIO</div>
+      <div className="brand">作品集</div>
       <ul className="menu">
         {navs.map((n) => (
           <li key={n.href}>

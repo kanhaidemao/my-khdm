@@ -9,11 +9,9 @@ import AppFooter from './components/AppFooter'
 
 export default function App() {
   usePageEffects()
-
   return (
     <>
       <div className="scroll-progress" />
-
       <AppHeader />
       <HeroSection />
       <AboutSection />

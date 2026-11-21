@@ -121,9 +121,15 @@ const DriftWall = ({
   );
 
   useEffect(() => {
+    const root = containerRef.current;
+    let visible = true;
+
     const animate = ts => {
+      rafRef.current = null;
+      if (!visible || document.hidden) return;
+
       if (lastTsRef.current === null) lastTsRef.current = ts;
-      const dt = Math.min(0.05, Math.max(0, ts - lastTsRef.current) / 1000);
+      const dt = Math.min(0.05, Math.max(0, (ts - lastTsRef.current) / 1000));
       lastTsRef.current = ts;
 
       const maxTilt = parallax * 8;
@@ -151,22 +157,47 @@ const DriftWall = ({
           const el = trackRefs.current[c];
           if (el) el.style.transform = `translate3d(0, ${-next}px, 0)`;
         }
-      } else {
-        for (let c = 0; c < trackRefs.current.length; c++) {
-          const el = trackRefs.current[c];
-          const meta = columnMeta[c];
-          if (el && meta) el.style.transform = `translate3d(0, ${-(offsetsRef.current[c] ?? 0)}px, 0)`;
-        }
       }
 
+      if (visible && !document.hidden) rafRef.current = requestAnimationFrame(animate);
+    };
+
+    const start = () => {
+      if (rafRef.current || !visible || document.hidden) return;
+      lastTsRef.current = null;
       rafRef.current = requestAnimationFrame(animate);
     };
 
-    rafRef.current = requestAnimationFrame(animate);
+    const io =
+      root && typeof IntersectionObserver !== 'undefined'
+        ? new IntersectionObserver(
+            ([entry]) => {
+              visible = entry.isIntersecting;
+              if (visible) start();
+              else if (rafRef.current) {
+                cancelAnimationFrame(rafRef.current);
+                rafRef.current = null;
+                lastTsRef.current = null;
+              }
+            },
+            { threshold: 0.05 }
+          )
+        : null;
+
+    if (root && io) io.observe(root);
+    start();
+
+    const onVisibility = () => {
+      if (!document.hidden) start();
+    };
+    document.addEventListener('visibilitychange', onVisibility);
+
     return () => {
       if (rafRef.current) cancelAnimationFrame(rafRef.current);
       rafRef.current = null;
       lastTsRef.current = null;
+      io?.disconnect();
+      document.removeEventListener('visibilitychange', onVisibility);
     };
   }, [baseVelocities, columnMeta, pauseOnHover, parallax, reduced, applyPlaneTransform]);
 

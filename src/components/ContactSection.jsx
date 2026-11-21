@@ -7,28 +7,28 @@ export default function ContactSection() {
     <section id="contact" className="contact-section">
       <div className="contact-drift" aria-hidden="true">
         <DriftWall
-          columns={6}
-          tileWidth={180}
-          tileHeight={120}
-          gap={16}
-          radius={12}
-          tilt={16}
-          turn={-14}
-          perspective={1200}
-          depth={140}
-          speed={36}
+          columns={5}
+          tileWidth={160}
+          tileHeight={108}
+          gap={14}
+          radius={10}
+          tilt={12}
+          turn={-12}
+          perspective={1100}
+          depth={110}
+          speed={28}
           direction="up"
-          variance={0.45}
-          parallax={0.55}
-          lift={56}
-          fade={0.72}
-          dim={0.42}
+          variance={0.4}
+          parallax={0.3}
+          lift={40}
+          fade={0.7}
+          dim={0.45}
           overlayColor="#0a0a0a"
         />
       </div>
 
       <div className="contact-content">
-        <SectionHead num="04 — Contact" title="联系我" />
+        <SectionHead num="04 — 联系" title="联系我" />
         <p className="contact-big reveal">
           有合作意向？
           <br />

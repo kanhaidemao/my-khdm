@@ -1,14 +1,14 @@
 export const navs = [
-  { href: '#about', label: 'About' },
-  { href: '#skills', label: 'Skills' },
-  { href: '#work', label: 'Work' },
-  { href: '#contact', label: 'Contact' }
+  { href: '#about', label: '关于' },
+  { href: '#skills', label: '技能' },
+  { href: '#work', label: '作品' },
+  { href: '#contact', label: '联系' }
 ]
 
 export const stats = [
-  { count: 5, label: 'Years Exp.' },
-  { count: 30, label: 'Projects' },
-  { count: 100, label: 'Dedication' }
+  { count: 5, label: '年经验' },
+  { count: 30, label: '个项目' },
+  { count: 100, label: '专注度' }
 ]
 
 export const skills = [
@@ -63,7 +63,8 @@ export const projects = [
     tags: 'Vue3 · TypeScript · Element Plus',
     image: 'https://picsum.photos/id/1015/900/1200',
     label: '企业级管理后台',
-    link: '#'
+    link: '#',
+    accent: '#ff8a4c'
   },
   {
     num: '02',
@@ -71,7 +72,8 @@ export const projects = [
     tags: '微信小程序 · Vant · 云开发',
     image: 'https://picsum.photos/id/1018/900/1200',
     label: '电商小程序',
-    link: '#'
+    link: '#',
+    accent: '#ff5a36'
   },
   {
     num: '03',
@@ -79,7 +81,8 @@ export const projects = [
     tags: 'ECharts · Three.js · WebGL',
     image: 'https://picsum.photos/id/1039/900/1200',
     label: '数据可视化大屏',
-    link: '#'
+    link: '#',
+    accent: '#a98bff'
   },
   {
     num: '04',
@@ -87,7 +90,8 @@ export const projects = [
     tags: 'Vue · CSS3动画 · 性能优化',
     image: 'https://picsum.photos/id/1043/900/1200',
     label: '移动端 H5 活动页',
-    link: '#'
+    link: '#',
+    accent: '#ffb27a'
   },
   {
     num: '05',
@@ -95,7 +99,17 @@ export const projects = [
     tags: 'React · Storybook · Design Tokens',
     image: 'https://picsum.photos/id/1044/900/1200',
     label: '设计系统与组件库',
-    link: '#'
+    link: '#',
+    accent: '#7cc4ff'
+  },
+  {
+    num: '06',
+    name: '个人作品集站点',
+    tags: 'React · Vite · 动效交互',
+    image: 'https://picsum.photos/id/1040/900/1200',
+    label: '个人作品集站点',
+    link: '#',
+    accent: '#ff7eb6'
   }
 ]
 

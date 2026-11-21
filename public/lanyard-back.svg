@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="768" height="1080" viewBox="0 0 768 1080">
+  <defs>
+    <linearGradient id="back" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#1a1a1e"/>
+      <stop offset="100%" stop-color="#0c0c0f"/>
+    </linearGradient>
+  </defs>
+  <rect width="768" height="1080" fill="url(#back)"/>
+  <rect x="64" y="120" width="640" height="840" rx="24" fill="none" stroke="#ff5722" stroke-width="3" opacity="0.7"/>
+  <text x="384" y="480" text-anchor="middle" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="48" font-weight="700" fill="#f5f5f5"> pWSŒ</text>
+  <text x="384" y="560" text-anchor="middle" font-family="Segoe UI, sans-serif" font-size="26" fill="#999999">Drag · Throw · Flip</text>
+  <circle cx="384" cy="820" r="48" fill="none" stroke="#ff5722" stroke-width="3"/>
+  <circle cx="384" cy="820" r="18" fill="#ff5722"/>
+</svg>

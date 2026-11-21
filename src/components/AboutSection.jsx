@@ -1,14 +1,35 @@
 import SectionHead from './SectionHead'
+import LazyMount from './LazyMount'
+import Lanyard from './react-bits/Lanyard'
 import { stats } from '../data/portfolio'
 
 export default function AboutSection() {
   return (
     <section id="about" className="about-section">
-      <SectionHead num="01 — About" title="关于我" />
+      <SectionHead num="01 — 关于" title="关于我" />
       <div className="about-grid">
         <div className="portrait-wrap reveal">
-          <div className="portrait" />
-          <div className="portrait-border" />
+          <LazyMount className="portrait-lanyard" minHeight={520} rootMargin="320px 0px">
+            <Lanyard
+              frontImage="./lanyard-front.svg"
+              backImage="./lanyard-back.svg"
+              imageFit="cover"
+              orientation="portrait"
+              finish="glossy"
+              cardColor="#ffffff"
+              strapColor="#111111"
+              metal="silver"
+              size={0.65}
+              strapLength={0.5}
+              strapWidth={0.65}
+              gravity={1}
+              damping={0.55}
+              elasticity={0.5}
+              breeze={0}
+              interactive
+              intro
+            />
+          </LazyMount>
         </div>
         <div className="about-text reveal">
           <h3>一名热爱设计与技术的前端工程师</h3>
