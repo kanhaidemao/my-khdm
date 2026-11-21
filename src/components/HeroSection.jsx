@@ -47,11 +47,11 @@ export default function HeroSection() {
             shardSize={0.14}
             irregularity={0.45}
             crack={0.45}
-            quality={0.75}
-            glint={0.55}
+            quality={1}
+            glint={0.45}
             shatter
-            intro="assemble"
-            introDuration={1.2}
+            intro="fade"
+            introDuration={0.8}
             interactive
           />
         </div>

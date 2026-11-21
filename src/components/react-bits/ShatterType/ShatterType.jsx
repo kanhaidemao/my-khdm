@@ -43,15 +43,14 @@ function layoutText(ctx, text, fontSize, letterSpacing, lineHeight, align, verti
   let size = fontSize
   if (size <= 0) {
     size = 120
-    // top 对齐时按「可视标题高度」适配，忽略下方留给碎片飞散的延伸区
+    // 预留上下边距，避免末行被裁切（朋友端分辨率不同时更明显）
     const usableH =
-      verticalAlign === 'top' ? Math.min(height, Math.max(160, width * 0.36)) : height
+      verticalAlign === 'top' ? Math.min(height * 0.92, Math.max(150, width * 0.34)) : height * 0.82
     for (let i = 0; i < 8; i++) {
       ctx.font = buildFont(ctx._fontFamily, ctx._fontWeight, size)
       const maxW = Math.max(...lines.map(measureLine), 1)
       const blockH = lines.length * size * lineHeight
-      const fitH = verticalAlign === 'top' ? 0.98 : 0.82
-      const fit = Math.min((width * 0.96) / maxW, (usableH * fitH) / blockH)
+      const fit = Math.min((width * 0.94) / maxW, usableH / blockH)
       size = Math.max(18, size * fit)
     }
   }
@@ -65,9 +64,9 @@ function layoutText(ctx, text, fontSize, letterSpacing, lineHeight, align, verti
   const blockH = lines.length * size * lineHeight
   const originX =
     align === 'left' ? width * 0.04 : align === 'right' ? width - width * 0.04 - blockW : (width - blockW) / 2
-  const topPad = size * 0.15
+  const topPad = Math.min(size * 0.1, Math.max(4, (height - blockH) * 0.15))
   const originY =
-    verticalAlign === 'top' ? topPad + size * 0.8 : (height - blockH) / 2 + size * 0.8
+    verticalAlign === 'top' ? topPad + size * 0.82 : (height - blockH) / 2 + size * 0.8
 
   const drawn = metrics.map((m, i) => {
     const x =
@@ -76,7 +75,7 @@ function layoutText(ctx, text, fontSize, letterSpacing, lineHeight, align, verti
     return { ...m, x, y }
   })
 
-  return { size, lines: drawn, blockW, blockH, originX, originY: originY - size * 0.8 }
+  return { size, lines: drawn, blockW, blockH, originX, originY: Math.max(0, originY - size * 0.85) }
 }
 
 function drawLines(ctx, lines, size, letterSpacing, fillStyle) {
@@ -582,13 +581,24 @@ export default function ShatterType({
       }
 
       ctx.clearRect(0, 0, width, height)
-      if (needsSort) {
-        sortedCache = shards.slice().sort((a, b) => a.oz - b.oz || a.cy - b.cy)
-        needsSort = false
-      }
       const accent = parseColor(s.accentColor, '#7B5CFF')
-      for (let i = 0; i < sortedCache.length; i++) {
-        drawShard(ctx, sortedCache[i], texture, dpr, accent, s.glint, s.crack)
+      const calm =
+        introDone &&
+        !pointer.inside &&
+        now > bustUntil + 200 &&
+        !shards.some((sh) => sh.fly || sh.crack > 0.02 || sh.flash > 0.02 || Math.hypot(sh.ox, sh.oy, sh.oz, sh.rot) > 0.15)
+
+      // 静止时整图绘制，避免碎片接缝在部分浏览器上透出背景形成「裂缝」
+      if (calm && texture) {
+        ctx.drawImage(texture, 0, 0, texture.width, texture.height, 0, 0, width, height)
+      } else {
+        if (needsSort) {
+          sortedCache = shards.slice().sort((a, b) => a.oz - b.oz || a.cy - b.cy)
+          needsSort = false
+        }
+        for (let i = 0; i < sortedCache.length; i++) {
+          drawShard(ctx, sortedCache[i], texture, dpr, accent, s.glint, s.crack)
+        }
       }
 
       const busy = moving || pointer.inside || now < bustUntil + 600 || !introDone
@@ -627,9 +637,18 @@ export default function ShatterType({
       { threshold: 0.05 }
     )
 
-    rebuild()
-    lastSize = `${Math.round(root.clientWidth)}x${Math.round(root.clientHeight)}`
-    wake()
+    const boot = () => {
+      rebuild()
+      lastSize = `${Math.round(root.clientWidth)}x${Math.round(root.clientHeight)}`
+      wake()
+    }
+    // 等字体就绪再布局，避免朋友电脑缺字体时度量不准产生缝隙
+    if (document.fonts?.ready) {
+      document.fonts.ready.then(boot).catch(boot)
+    } else {
+      boot()
+    }
+
     ro.observe(root)
     io.observe(root)
     root.addEventListener('pointermove', onMove, { passive: true })
